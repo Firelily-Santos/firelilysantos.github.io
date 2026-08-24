@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraryreeds | Patron Account Settings</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #090a0f;
+      --bg-surface: #11131a;
+      --bg-surface-elevated: #181b24;
+      --border-subtle: #232734;
+      --border-focus: #3d445a;
+      
+      --text-primary: #f1f3f7;
+      --text-secondary: #8e95a5;
+      --text-muted: #525866;
+      
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d9be9b;
+      --accent-gold-dim: rgba(197, 168, 128, 0.12);
+      
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Top Navigation Header */
+    .account-header { border-bottom: 1px solid var(--border-subtle); background: rgba(9, 10, 15, 0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; height: 70px; display: flex; align-items: center; }
+    .header-container { width: 100%; max-width: 1540px; margin: 0 auto; padding: 0 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .header-left-group { display: flex; align-items: center; gap: 20px; }
+    
+    .brand-group { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; display: block; border: 1.5px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-primary); text-transform: uppercase; white-space: nowrap; }
+
+    .nav-actions-header { display: flex; align-items: center; gap: 20px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.825rem; font-weight: 500; text-transform: uppercase; transition: var(--transition-smooth); }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
+
+    .save-top-btn { background: var(--accent-gold); color: var(--bg-base); border: none; padding: 9px 24px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: var(--transition-smooth); }
+    .save-top-btn:hover { background: var(--accent-gold-hover); }
+
+    /* Workspace */
+    .admin-workspace { display: flex; flex: 1; width: 100%; max-width: 1540px; margin: 0 auto; }
+
+    /* Sidebar Navigation */
+    .admin-sidebar { width: 260px; border-right: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 28px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; flex-shrink: 0; }
+    .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+    
+    .nav-item { display: flex; align-items: center; padding: 10px 14px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; border-radius: 2px; transition: var(--transition-smooth); cursor: pointer; background: transparent; border: none; width: 100%; text-align: left; }
+    .nav-item:hover { background: var(--bg-surface-elevated); color: var(--text-primary); }
+    .nav-item.active { background: var(--accent-gold-dim); color: var(--accent-gold); font-weight: 600; }
+
+    .sidebar-divider { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 16px 14px 6px; font-weight: 600; }
+    .sub-nav-item { padding-left: 28px; font-size: 0.8rem; }
+
+    .sidebar-bottom-actions { display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-back-btn { color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 2px; transition: var(--transition-smooth); }
+    .sidebar-back-btn:hover { background: var(--accent-gold-dim); }
+
+    .logout-btn { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 10px 14px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 2px; cursor: pointer; text-align: left; transition: var(--transition-smooth); }
+    .logout-btn:hover { border-color: #ff6b6b; color: #ff6b6b; background: rgba(255, 107, 107, 0.08); }
+
+    /* Main Content Area */
+    .admin-main { flex: 1; padding: 32px 48px 64px; display: flex; flex-direction: column; gap: 28px; overflow-y: auto; }
+    .view-section { display: none; flex-direction: column; gap: 28px; }
+    .view-section.active-view { display: flex; }
+
+    .breadcrumb { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .breadcrumb span { color: var(--accent-gold); }
+    .page-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); margin-top: 4px; }
+
+    .settings-panel { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; overflow: hidden; }
+    .panel-header { padding: 16px 24px; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: space-between; }
+    .panel-title { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
+    .panel-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .stat-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 20px; border-radius: 4px; }
+    .stat-num { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 600; color: var(--accent-gold); }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); margin-top: 4px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-secondary); text-transform: uppercase; }
+    .form-input, .form-select { width: 100%; padding: 10px 14px; background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 2px; color: var(--text-primary); font-size: 0.875rem; outline: none; }
+    .form-input:focus, .form-select:focus { border-color: var(--accent-gold); }
+
+    .primary-btn { background: var(--accent-gold); color: var(--bg-base); border: none; padding: 10px 20px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 2px; cursor: pointer; align-self: flex-start; }
+    .primary-btn:hover { background: var(--accent-gold-hover); }
+
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    .data-table th { padding: 12px 16px; background: var(--bg-surface-elevated); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); text-transform: uppercase; font-size: 0.725rem; }
+    .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--text-primary); }
+
+    .save-feedback { font-size: 0.825rem; color: var(--accent-gold); display: none; }
+
+    @media (max-width: 1024px) {
+      .admin-workspace { flex-direction: column; }
+      .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-subtle); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="account-header">
+    <div class="header-container">
+      <div class="header-left-group">
+        <a href="./index.html" class="brand-group">
+          <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+          <span class="brand-title">Libraryreeds</span>
+        </a>
+      </div>
+
+      <div class="nav-actions-header">
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+        <span class="save-feedback" id="saveFeedback">✓ Settings Saved</span>
+        <button type="button" class="save-top-btn" id="global-save-btn">Save Changes</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-workspace">
+    <aside class="admin-sidebar">
+      <nav class="sidebar-menu">
+        <button type="button" class="nav-item active" data-target="dashboard">📊 Dashboard</button>
+        <button type="button" class="nav-item" data-target="library">📚 My Library</button>
+        <button type="button" class="nav-item" data-target="orders">🧾 Order History</button>
+
+        <div class="sidebar-divider">Personal Preferences</div>
+        <button type="button" class="nav-item sub-nav-item" data-target="shipping">Shipping Address</button>
+        <button type="button" class="nav-item sub-nav-item" data-target="general">Language &amp; Region</button>
+        <button type="button" class="nav-item sub-nav-item" data-target="payments">Payment Methods</button>
+
+        <div class="sidebar-divider">Account</div>
+        <button type="button" class="nav-item" data-target="profile">👤 Reader Profile</button>
+      </nav>
+
+      <div class="sidebar-bottom-actions">
+        <a href="./index.html" class="sidebar-back-btn"><span>←</span> Back to Homepage</a>
+        <button type="button" class="logout-btn" id="logout-btn">Logout</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div>
+        <p class="breadcrumb">Account Settings &gt; <span id="breadcrumb-title">My Dashboard</span></p>
+        <h1 class="page-title" id="page-heading">Reader Dashboard</h1>
+      </div>
+
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="view-dashboard" class="view-section active-view">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" id="dashOwnedCount">0</div>
+            <div class="stat-label">Archives Owned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="dashOrderCount">0</div>
+            <div class="stat-label">Completed Orders</div>
+          </div>
+        </div>
+
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📖 Reader Hub</h2>
+          </div>
+          <div class="panel-body">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Welcome to your Libraryreeds reader account. View your purchased digital downloads, track physical shipments, and update your personal address details below.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="primary-btn" onclick="switchTab('library')">View Purchased Library</button>
+              <button class="primary-btn" style="background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary);" onclick="switchTab('orders')">Track Orders</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. MY LIBRARY VIEW -->
+      <section id="view-library" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📚 My Purchased Library</h2>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Format</th>
+                  <th>Download / Status</th>
+                </tr>
+              </thead>
+              <tbody id="libraryTableBody">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: var(--text-muted);">No purchased volumes found yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. ORDERS VIEW -->
+      <section id="view-orders" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📦 Past Orders &amp; Receipts</h2>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: var(--text-muted);">No past orders recorded.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SHIPPING VIEW -->
+      <section id="view-shipping" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">🚚 Primary Shipping Address</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">Street Address:</label>
+              <input type="text" class="form-input" id="shippingAddressInput" placeholder="123 Bookbinders Lane">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City, State, Zip:</label>
+              <input type="text" class="form-input" id="shippingCityInput" placeholder="City, State, Zip">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. GENERAL PREFERENCES VIEW -->
+      <section id="view-general" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">⚙️ Language &amp; Regional Display</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">Language:</label>
+              <select class="form-select" style="max-width: 320px;">
+                <option value="en">English (US)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. PAYMENTS VIEW -->
+      <section id="view-payments" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">💳 Saved Payment Methods</h2>
+          </div>
+          <div class="panel-body">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Checkout is processed securely via Majority Pay with zero stored sensitive payment credentials.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. PROFILE VIEW -->
+      <section id="view-profile" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">👤 User Profile Details</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">Full Name:</label>
+              <input type="text" class="form-input" id="profileFullName" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address:</label>
+              <input type="email" class="form-input" id="profileEmail" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number:</label>
+              <input type="tel" class="form-input" id="profilePhone" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Tab Navigation Script -->
+  <script>
+    const sections = document.querySelectorAll('.view-section');
+    window.switchTab = function(targetId) {
+      sections.forEach(sec => sec.classList.remove('active-view'));
+      const activeSection = document.getElementById(`view-${targetId}`);
+      if (activeSection) activeSection.classList.add('active-view');
+
+      document.querySelectorAll('.admin-sidebar .nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.target === targetId);
+      });
+
+      const titleMap = {
+        dashboard: "Reader Dashboard",
+        library: "My Purchased Library",
+        orders: "Past Order Receipts",
+        shipping: "Shipping Address",
+        general: "Language & Region",
+        payments: "Payment Methods",
+        profile: "Account Profile"
+      };
+      document.getElementById('breadcrumb-title').textContent = titleMap[targetId] || "Account Settings";
+      document.getElementById('page-heading').textContent = titleMap[targetId] || "Account Settings";
+    };
+
+    document.querySelectorAll('.admin-sidebar .nav-item').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.target;
+        if (target) switchTab(target);
+      });
+    });
+
+    const saveFeedback = document.getElementById('saveFeedback');
+    document.getElementById('global-save-btn').addEventListener('click', () => {
+      saveFeedback.style.display = 'inline';
+      setTimeout(() => { saveFeedback.style.display = 'none'; }, 3000);
+    });
+  </script>
+
+  <!-- Clean Firebase User Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.replace("./login.html");
+        return;
+      }
+
+      let patronName = user.displayName || user.email.split("@")[0];
+      document.getElementById("profileEmail").value = user.email || "";
+      document.getElementById("profileFullName").value = patronName;
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const uData = userDoc.data();
+          if (uData.name) document.getElementById("profileFullName").value = uData.name;
+          if (uData.shippingAddress) document.getElementById("shippingAddressInput").value = uData.shippingAddress;
+          if (uData.shippingCity) document.getElementById("shippingCityInput").value = uData.shippingCity;
+          if (uData.phone) document.getElementById("profilePhone").value = uData.phone;
+        }
+
+        const ordersSnap = await getDocs(collection(db, "users", user.uid, "orders"));
+        if (!ordersSnap.empty) {
+          document.getElementById("dashOrderCount").textContent = ordersSnap.size;
+          document.getElementById("dashOwnedCount").textContent = ordersSnap.size;
+          const ordersTbody = document.getElementById("ordersTableBody");
+          const libraryTbody = document.getElementById("libraryTableBody");
+          ordersTbody.innerHTML = "";
+          libraryTbody.innerHTML = "";
+
+          ordersSnap.forEach((docSnap) => {
+            const o = docSnap.data();
+            
+            const trOrder = document.createElement("tr");
+            trOrder.innerHTML = `
+              <td><strong>${o.orderNumber || o.orderId || '#BK-ORD'}</strong></td>
+              <td>${o.date ? new Date(o.date.toDate()).toLocaleDateString() : 'Aug 2026'}</td>
+              <td style="color: var(--accent-gold);">$${o.totalPaid || o.total || o.price || '0.00'}</td>
+              <td><span style="color: #69db7c;">● Confirmed</span></td>
+            `;
+            ordersTbody.appendChild(trOrder);
+
+            const trLib = document.createElement("tr");
+            trLib.innerHTML = `
+              <td><strong>${o.title || 'Archival Edition'}</strong></td>
+              <td>${o.author || 'Libraryreeds Archive'}</td>
+              <td><span style="color: var(--accent-gold);">${o.format || 'EPUB'}</span></td>
+              <td>${o.epubUrl ? `<a href="${o.epubUrl}" target="_blank" style="color:#69db7c; text-decoration:none; font-weight:600;">Download File ↗</a>` : '<span style="color:#69db7c;">● Ready</span>'}</td>
+            `;
+            libraryTbody.appendChild(trLib);
+          });
+        }
+      } catch (err) {
+        console.warn("Profile load error:", err);
+      }
+    });
+
+    document.getElementById("global-save-btn").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const newName = document.getElementById("profileFullName").value.trim();
+        const newAddress = document.getElementById("shippingAddressInput").value.trim();
+        const newCity = document.getElementById("shippingCityInput").value.trim();
+        const newPhone = document.getElementById("profilePhone").value.trim();
+
+        try {
+          await updateProfile(user, { displayName: newName || user.displayName });
+          await setDoc(doc(db, "users", user.uid), {
+            name: newName,
+            shippingAddress: newAddress,
+            shippingCity: newCity,
+            phone: newPhone
+          }, { merge: true });
+        } catch (err) {
+          console.warn("Profile save error:", err);
+        }
+      }
+    });
+
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+          if (window.indexedDB && indexedDB.databases) {
+            const dbs = await indexedDB.databases();
+            dbs.forEach(dbInfo => {
+              if (dbInfo.name && dbInfo.name.includes("firebase")) {
+                indexedDB.deleteDatabase(dbInfo.name);
+              }
+            });
+          }
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("./index.html");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
